@@ -34,9 +34,8 @@ jobs:
             -u "x-access-token:${GH_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")"
-          mapfile -t page_response < <(python3 -c 'import json, pathlib; path = pathlib.Path("/tmp/pages-site.json"); data = json.loads(path.read_text() or "{}") if path.exists() and path.read_text().strip() else {}; print(data.get("message", "")); print(data.get("documentation_url", ""))')
-          response_message="${page_response[0]}"
-          documentation_url="${page_response[1]}"
+          response_message="$(sed -n 's/.*"message"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' /tmp/pages-site.json | head -n 1)"
+          documentation_url="$(sed -n 's/.*"documentation_url"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' /tmp/pages-site.json | head -n 1)"
 
           if [ "${status}" = "200" ]; then
             echo "enabled=true" >> "${GITHUB_OUTPUT}"
