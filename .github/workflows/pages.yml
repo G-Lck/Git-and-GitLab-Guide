@@ -34,14 +34,18 @@ jobs:
             -u "x-access-token:${GH_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")"
+          response_message="$(python -c 'import json, pathlib; path = pathlib.Path("/tmp/pages-site.json"); data = json.loads(path.read_text() or "{}") if path.exists() and path.read_text().strip() else {}; print(data.get("message", ""))')"
+          documentation_url="$(python -c 'import json, pathlib; path = pathlib.Path("/tmp/pages-site.json"); data = json.loads(path.read_text() or "{}") if path.exists() and path.read_text().strip() else {}; print(data.get("documentation_url", ""))')"
 
           if [ "${status}" = "200" ]; then
             echo "enabled=true" >> "${GITHUB_OUTPUT}"
-          elif [ "${status}" = "404" ]; then
+          elif [ "${status}" = "404" ] \
+            && [ "${response_message}" = "Not Found" ] \
+            && [ "${documentation_url}" = "https://docs.github.com/rest/pages/pages#get-a-apiname-pages-site" ]; then
             echo "enabled=false" >> "${GITHUB_OUTPUT}"
             echo "::notice::GitHub Pages is not enabled for ${GITHUB_REPOSITORY}. Enable Pages and set the source to GitHub Actions in repository settings to deploy this site."
           else
-            echo "::error::Failed to query the GitHub Pages API for ${GITHUB_REPOSITORY} (HTTP ${status})."
+            echo "::error::Failed to query the GitHub Pages API for ${GITHUB_REPOSITORY} (HTTP ${status}, message: ${response_message}, docs: ${documentation_url})."
             exit 1
           fi
 
