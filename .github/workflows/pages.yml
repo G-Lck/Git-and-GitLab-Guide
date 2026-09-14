@@ -34,15 +34,14 @@ jobs:
             -u "x-access-token:${GH_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")"
-          mapfile -t page_response < <(python -c 'import json, pathlib; path = pathlib.Path("/tmp/pages-site.json"); data = json.loads(path.read_text() or "{}") if path.exists() and path.read_text().strip() else {}; print(data.get("message", "")); print(data.get("documentation_url", ""))')
+          mapfile -t page_response < <(python3 -c 'import json, pathlib; path = pathlib.Path("/tmp/pages-site.json"); data = json.loads(path.read_text() or "{}") if path.exists() and path.read_text().strip() else {}; print(data.get("message", "")); print(data.get("documentation_url", ""))')
           response_message="${page_response[0]}"
           documentation_url="${page_response[1]}"
 
           if [ "${status}" = "200" ]; then
             echo "enabled=true" >> "${GITHUB_OUTPUT}"
           elif [ "${status}" = "404" ] \
-            && [ "${response_message}" = "Not Found" ] \
-            && [ "${documentation_url}" = "https://docs.github.com/rest/pages/pages#get-a-apiname-pages-site" ]; then
+            && [ "${response_message}" = "Not Found" ]; then
             echo "enabled=false" >> "${GITHUB_OUTPUT}"
             echo "::notice::GitHub Pages is not enabled for ${GITHUB_REPOSITORY}. Enable Pages and set the source to GitHub Actions in repository settings to deploy this site."
           else
