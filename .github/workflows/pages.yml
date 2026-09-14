@@ -37,9 +37,12 @@ jobs:
 
           if [ "${status}" = "200" ]; then
             echo "enabled=true" >> "${GITHUB_OUTPUT}"
-          else
+          elif [ "${status}" = "404" ]; then
             echo "enabled=false" >> "${GITHUB_OUTPUT}"
             echo "::notice::GitHub Pages is not enabled for ${GITHUB_REPOSITORY}. Enable Pages and set the source to GitHub Actions in repository settings to deploy this site."
+          else
+            echo "::error::Failed to query the GitHub Pages API for ${GITHUB_REPOSITORY} (HTTP ${status})."
+            exit 1
           fi
 
       - name: Configure GitHub Pages
