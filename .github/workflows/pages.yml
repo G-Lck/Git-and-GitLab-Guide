@@ -34,7 +34,7 @@ jobs:
             -H "Authorization: Bearer ${GH_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")"
-          mapfile -t page_response < <(jq -r '(.message // ""), (.documentation_url // "")' /tmp/pages-site.json)
+          mapfile -t page_response < <(node -e 'const fs = require("fs"); const text = fs.existsSync("/tmp/pages-site.json") ? fs.readFileSync("/tmp/pages-site.json", "utf8").trim() : ""; const data = text ? JSON.parse(text) : {}; console.log(data.message ?? ""); console.log(data.documentation_url ?? "");')
           response_message="${page_response[0]}"
           documentation_url="${page_response[1]}"
 
