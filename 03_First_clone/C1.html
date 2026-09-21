@@ -121,21 +121,48 @@
 		</div>
 	</section>
 
+	<section class="step">
+		<h2><span class="step-num">2</span>Configure your Git identity</h2>
+		<div class="step-body">
+			<p>Set the name and email address that Git will record in your commits. Replace the example values with your own information:</p>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git config --global user.name "Your Full Name"</pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git config --global user.email "your.email@example.com"</pre>
+			</div>
+			<p>Check that your identity was saved correctly:</p>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git config --global user.name</pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git config --global user.email</pre>
+			</div>
+		</div>
+	</section>
+
 	<div class="warn home-warning">
 		<strong class="warning-title">Fix the home directory on a UniGe computer</strong>
 		<div class="step-body">
 			<p>On UniGe computers, the <code class="inline">HOME</code> environment variable may be missing. On Windows, open PowerShell and run:</p>
 			<div class="code-block" data-os-block data-os="windows">
 				<button class="copy-btn">Copy</button>
-				<pre><span class="prompt">$</span> $env:HOME = $env:USERPROFILE
-<span class="prompt">$</span> [Environment]::SetEnvironmentVariable("HOME", $env:USERPROFILE, "User")</pre>
+				<pre><span class="prompt">$</span> $env:HOME = $env:USERPROFILE</pre>
+			</div>
+			<div class="code-block" data-os-block data-os="windows">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> [Environment]::SetEnvironmentVariable("HOME", $env:USERPROFILE, "User")</pre>
 			</div>
 			<p>Close and reopen PowerShell or VS Code afterwards. The setting should make <code class="inline">HOME</code> point to your Windows user folder.</p>
 		</div>
 	</div>
 
 	<section class="step">
-		<h2><span class="step-num">2</span>Find your first project</h2>
+		<h2><span class="step-num">3</span>Find your first project</h2>
 		<div class="step-body">
 			<ol>
 				<li>Go to <a href="https://gitlab.unige.ch/" target="_blank">gitlab.unige.ch</a> and open <strong>Groups</strong>.</li>
@@ -191,6 +218,11 @@
 				<pre><span class="prompt">$</span> git clone PASTE_THE_SSH_URL_HERE</pre>
 			</div>
 			<p>For example, the command will look similar to <code class="inline">git clone git@gitlab.unige.ch:group/project.git</code>.</p>
+            <p>If you see a message like that: enter "yes" to continue connecting.</p>
+            <figure>
+                <img src="images/git_continue_connecting.png" alt="Git asking to continue connecting">
+                <figcaption>Enter "yes" to continue connecting.</figcaption>
+            </figure>
 			<p>Enter the project directory:</p>
 			<div class="code-block">
 				<button class="copy-btn">Copy</button>
@@ -210,22 +242,28 @@
 			<p>Create a text file containing a short greeting:</p>
 			<div class="code-block" data-os-block data-os="windows">
 				<button class="copy-btn">Copy</button>
-				<pre><span class="prompt">$</span> echo "Hello, World!" &gt; yourlogin.txt</pre>
+				<pre><span class="prompt">$</span> echo "Hello, World!" &gt; your-login.txt</pre>
 			</div>
 			<div class="code-block" data-os-block data-os="mac">
 				<button class="copy-btn">Copy</button>
-				<pre><span class="prompt">$</span> echo "Hello, World!" &gt; yourlogin.txt</pre>
+				<pre><span class="prompt">$</span> echo "Hello, World!" &gt; your-login.txt</pre>
 			</div>
 			<div class="code-block" data-os-block data-os="linux">
 				<button class="copy-btn">Copy</button>
-				<pre><span class="prompt">$</span> echo "Hello, World!" &gt; yourlogin.txt</pre>
+				<pre><span class="prompt">$</span> echo "Hello, World!" &gt; your-login.txt</pre>
 			</div>
 			<p>Stage the file, create a commit, and send it to GitLab:</p>
 			<div class="code-block">
 				<button class="copy-btn">Copy</button>
-				<pre><span class="prompt">$</span> git add yourlogin.txt
-<span class="prompt">$</span> git commit -m "Add yourlogin.txt with Hello, World!"
-<span class="prompt">$</span> git push origin main</pre>
+				<pre><span class="prompt">$</span> git add your-login.txt</pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git commit -m "write the message you want to describe your change"</pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git push origin main</pre>
 			</div>
 			<div class="tip">
 				<strong>What just happened?</strong>
