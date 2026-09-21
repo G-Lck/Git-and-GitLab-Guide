@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do your first clone, pull and push</title>
+<style>
+	:root{
+		--paper:#F5F6F3;
+		--ink:#1C2321;
+		--ink-soft:#4A524F;
+		--accent:#3E6259;
+		--accent-soft:#DCE7E3;
+		--line:#D8DBD7;
+		--code-bg:#20262A;
+		--code-text:#E7ECE9;
+		--code-accent:#7FBFA8;
+		--warn-bg:#FBF3E3;
+		--warn-line:#D9A441;
+		--header-bg:#023117;
+	}
+	*{box-sizing:border-box;}
+	html{scroll-behavior:smooth;}
+	body{
+		margin:0;
+		background:var(--paper);
+	color:var(--ink);
+	font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+	line-height:1.55;
+	}
+	.wrap{max-width:740px; margin:0 auto; padding:0 24px 80px;}
+	header{background:var(--header-bg); color:var(--paper); padding:48px 24px 40px; margin-bottom:8px;}
+	header .wrap{padding:0;}
+	h1{font-size:1.7rem; margin:0 0 8px; font-weight:650; letter-spacing:-0.01em;}
+	header p{margin:0; color:#C9D3CE; font-size:0.98rem;}
+	h2{font-size:1.15rem; margin:0 0 4px; font-weight:650; display:flex; align-items:baseline; gap:10px;}
+	.step-num{color:var(--accent); font-variant-numeric:tabular-nums; font-size:0.95rem; font-weight:700;}
+	section.step{padding:32px 0; border-bottom:1px solid var(--line);}
+	section.step:last-of-type{border-bottom:none;}
+	.step-body{margin-top:14px;}
+	p{margin:0 0 12px;}
+	ul,ol{margin:0 0 12px; padding-left:22px;}
+	li{margin-bottom:6px;}
+	a{color:var(--accent);}
+	code.inline{background:var(--accent-soft); padding:1px 6px; border-radius:4px; font-family:"SF Mono", Consolas, Menlo, monospace; font-size:0.88em;}
+	.os-switch{position:sticky; top:0; z-index:10; background:var(--paper); padding:14px 0 10px; border-bottom:1px solid var(--line); margin-bottom:8px;}
+	.os-switch .wrap{padding:0 24px; display:flex; align-items:center; gap:10px; max-width:740px; margin:0 auto;}
+	.os-switch span.label{font-size:0.82rem; color:var(--ink-soft); margin-right:2px;}
+	.os-btn{font-family:inherit; font-size:0.85rem; padding:6px 14px; border-radius:20px; border:1px solid var(--line); background:var(--paper); color:var(--ink-soft); cursor:pointer; transition:background 0.15s, color 0.15s, border-color 0.15s;}
+	.os-btn:hover{border-color:var(--accent);}
+	.os-btn.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+	.code-block{position:relative; background:var(--code-bg); border-radius:8px; margin:10px 0 16px; overflow:hidden;}
+	.code-block pre{margin:0; padding:16px 44px 16px 16px; color:var(--code-text); font-family:"SF Mono", Consolas, Menlo, monospace; font-size:0.86rem; overflow-x:auto; white-space:pre;}
+	.code-block .prompt{color:var(--code-accent);}
+	.copy-btn{position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:var(--code-text); font-family:inherit; font-size:0.72rem; padding:5px 9px; border-radius:6px; cursor:pointer; transition:background 0.15s;}
+	.copy-btn:hover{background:rgba(255,255,255,0.18);}
+	.copy-btn.copied{background:var(--accent); border-color:var(--accent); color:#fff;}
+	[data-os-block]{display:none;}
+	[data-os-block].os-visible{display:block;}
+	figure{margin:16px 0; text-align:center;}
+	figure img{max-width:100%; border:1px solid var(--line); border-radius:8px; display:block; margin:0 auto;}
+	figcaption{font-size:0.8rem; color:var(--ink-soft); margin-top:6px;}
+	.tip,.warn{padding:12px 16px; border-radius:0 6px 6px 0; margin:14px 0; font-size:0.92rem;}
+	.tip{background:var(--accent-soft); border-left:3px solid var(--accent);}
+	.warn{background:var(--warn-bg); border-left:3px solid var(--warn-line);}
+	.home-warning{margin:32px 0;}
+	.home-warning .warning-title{font-size:1.15rem;}
+	.tip strong,.warn strong{display:block; margin-bottom:2px;}
+	footer{text-align:center; color:var(--ink-soft); font-size:0.82rem; padding:32px 24px 0;}
+	@media (max-width:520px){
+		.os-switch .wrap{flex-wrap:wrap;}
+		.os-switch span.label{width:100%;}
+	}
+</style>
+</head>
+<body>
+
+<header>
+	<div class="wrap">
+		<h1>Do your first clone, pull and push</h1>
+		<p>Work with your first project on GitLab</p>
+	</div>
+</header>
+
+<div class="os-switch">
+	<div class="wrap">
+		<span class="label">Your computer:</span>
+		<button class="os-btn" data-os="windows">Windows</button>
+		<button class="os-btn" data-os="mac">macOS</button>
+		<button class="os-btn" data-os="linux">Linux</button>
+	</div>
+</div>
+
+<div class="wrap">
+
+	<div class="warn">
+		<strong>Before you start</strong>
+		<p>Please complete the Installation guide before continuing.</p>
+	</div>
+	<section class="step">
+		<h2><span class="step-num">1</span>Install Git</h2>
+		<div class="step-body">
+			<p>First, check whether Git is already installed:</p>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git --version</pre>
+			</div>
+			<p>If Git is not installed, download it for your operating system:</p>
+			<ul>
+				<li><a href="https://git-scm.com/download/win" target="_blank">Windows</a></li>
+				<li><a href="https://git-scm.com/download/mac" target="_blank">macOS</a></li>
+				<li><a href="https://git-scm.com/download/linux" target="_blank">Linux</a></li>
+			</ul>
+			<div class="warn">
+				<strong>No administrator rights?</strong>
+				If you cannot install Git because you do not have administrator rights, ask your local IT support to install it or use an approved portable/user installation.
+			</div>
+		</div>
+	</section>
+
+	<div class="warn home-warning">
+		<strong class="warning-title">Fix the home directory on a UniGe computer</strong>
+		<div class="step-body">
+			<p>On UniGe computers, the <code class="inline">HOME</code> environment variable may be missing. On Windows, open PowerShell and run:</p>
+			<div class="code-block" data-os-block data-os="windows">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> $env:HOME = $env:USERPROFILE
+<span class="prompt">$</span> [Environment]::SetEnvironmentVariable("HOME", $env:USERPROFILE, "User")</pre>
+			</div>
+			<p>Close and reopen PowerShell or VS Code afterwards. The setting should make <code class="inline">HOME</code> point to your Windows user folder.</p>
+		</div>
+	</div>
+
+	<section class="step">
+		<h2><span class="step-num">2</span>Find your first project</h2>
+		<div class="step-body">
+			<ol>
+				<li>Go to <a href="https://gitlab.unige.ch/" target="_blank">gitlab.unige.ch</a> and open <strong>Groups</strong>.</li>
+			</ol>
+			<figure>
+				<img src="images/homepage_group.png" alt="GitLab home page with Groups highlighted">
+				<figcaption>Open Groups from the GitLab home page.</figcaption>
+			</figure>
+			<ol start="2">
+				<li>Open the <strong>HepB_Senegal_geneva</strong> group.</li>
+			</ol>
+			<figure>
+				<img src="images/HepB_Seg_Geneva_group.png" alt="HepB Senegal Geneva GitLab group">
+				<figcaption>Open the HepB_Senegal_geneva group.</figcaption>
+			</figure>
+			<ol start="3">
+					<div class="warn">
+						<strong>If you don't see it</strong>
+						<p>This means that you are not yet a member of the group. Please contact <a href="mailto:garance.lucke@unige.ch">garance.lucke@unige.ch</a> and provide the email address you used to create your GitLab account.</p>
+					</div>
+
+				<li>Open <strong>My first project</strong>.</li>
+			</ol>
+			<figure>
+				<img src="images/click_my_first_project.png" alt="My first project in the GitLab group">
+				<figcaption>Open your first project.</figcaption>
+			</figure>
+		</div>
+	</section>
+
+	<section class="step">
+		<h2><span class="step-num">4</span>Clone the project</h2>
+		<div class="step-body">
+			<ol>
+				<li>Click <strong>Code</strong>.</li>
+			</ol>
+			<figure>
+				<img src="images/click_code.png" alt="GitLab project page with the Code button highlighted">
+				<figcaption>Open the Code menu.</figcaption>
+			</figure>
+			<ol start="2">
+				<li>Under <strong>Clone with SSH</strong>, click the copy button next to the URL.</li>
+			</ol>
+			<figure>
+				<img src="images/click_copy_url.png" alt="Clone with SSH URL and copy button">
+				<figcaption>Copy the SSH clone URL.</figcaption>
+			</figure>
+			<ol start="3">
+				<li>Open a terminal, move to the folder where you want to store the project (with cd command), and paste the URL into this command:</li>
+			</ol>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git clone PASTE_THE_SSH_URL_HERE</pre>
+			</div>
+			<p>For example, the command will look similar to <code class="inline">git clone git@gitlab.unige.ch:group/project.git</code>.</p>
+			<p>Enter the project directory:</p>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> cd my_first_project</pre>
+			</div>
+		</div>
+	</section>
+
+	<section class="step">
+		<h2><span class="step-num">5</span>Create, commit and push a file</h2>
+		<div class="step-body">
+			<p>Before starting work, download the latest changes from GitLab:</p>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git pull origin main</pre>
+			</div>
+			<p>Create a text file containing a short greeting:</p>
+			<div class="code-block" data-os-block data-os="windows">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> echo "Hello, World!" &gt; yourlogin.txt</pre>
+			</div>
+			<div class="code-block" data-os-block data-os="mac">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> echo "Hello, World!" &gt; yourlogin.txt</pre>
+			</div>
+			<div class="code-block" data-os-block data-os="linux">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> echo "Hello, World!" &gt; yourlogin.txt</pre>
+			</div>
+			<p>Stage the file, create a commit, and send it to GitLab:</p>
+			<div class="code-block">
+				<button class="copy-btn">Copy</button>
+				<pre><span class="prompt">$</span> git add yourlogin.txt
+<span class="prompt">$</span> git commit -m "Add yourlogin.txt with Hello, World!"
+<span class="prompt">$</span> git push origin main</pre>
+			</div>
+			<div class="tip">
+				<strong>What just happened?</strong>
+				<code class="inline">git add</code> selected the file, <code class="inline">git commit</code> recorded the change locally, and <code class="inline">git push</code> uploaded the commit to the <code class="inline">main</code> branch on GitLab.
+			</div>
+		</div>
+	</section>
+
+</div>
+
+<footer>HepB_Seg_Geneva GitLab guide</footer>
+
+<script>
+	const OS_ORDER = ['windows', 'mac', 'linux'];
+
+	function detectDefaultOS(){
+		const ua = navigator.userAgent || '';
+		if(ua.includes('Win')) return 'windows';
+		if(ua.includes('Mac')) return 'mac';
+		if(ua.includes('Linux') || ua.includes('X11')) return 'linux';
+		return 'windows';
+	}
+
+	function setOS(os){
+		document.querySelectorAll('.os-btn').forEach(btn=>{
+			btn.classList.toggle('active', btn.dataset.os === os);
+		});
+		document.querySelectorAll('[data-os-block]').forEach(block=>{
+			block.classList.toggle('os-visible', block.dataset.os === os);
+		});
+		localStorage.setItem('preferredOS', os);
+	}
+
+	document.querySelectorAll('.os-btn').forEach(btn=>{
+		btn.addEventListener('click', ()=>setOS(btn.dataset.os));
+	});
+
+	setOS(localStorage.getItem('preferredOS') || detectDefaultOS());
+
+	document.querySelectorAll('.copy-btn').forEach(btn=>{
+		btn.addEventListener('click', async ()=>{
+			const pre = btn.parentElement.querySelector('pre');
+			const text = pre.textContent.replace(/^\$\s*/gm, '').trim();
+			try{
+				await navigator.clipboard.writeText(text);
+			}catch(e){
+				const ta = document.createElement('textarea');
+				ta.value = text;
+				document.body.appendChild(ta);
+				ta.select();
+				document.execCommand('copy');
+				document.body.removeChild(ta);
+			}
+			btn.textContent = 'Copied';
+			btn.classList.add('copied');
+			setTimeout(()=>{btn.textContent = 'Copy'; btn.classList.remove('copied');}, 1500);
+		});
+	});
+</script>
+
+</body>
+</html>
