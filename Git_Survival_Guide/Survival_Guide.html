@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Git Survival Guide</title>
+	<style>
+		:root{
+			--paper:#F5F6F3;
+			--ink:#1C2321;
+			--ink-soft:#4A524F;
+			--accent:#3E6259;
+			--accent-soft:#DCE7E3;
+			--line:#D8DBD7;
+			--code-bg:#20262A;
+			--code-text:#E7ECE9;
+			--code-accent:#7FBFA8;
+			--warn-bg:#FBF3E3;
+			--warn-line:#D9A441;
+			--header-bg:#023117;
+		}
+		*{box-sizing:border-box;}
+		html{scroll-behavior:smooth; scroll-padding-top:76px;}
+		body{
+			margin:0;
+			background:var(--paper);
+			color:var(--ink);
+			font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+			line-height:1.55;
+		}
+		.wrap{max-width:740px; margin:0 auto; padding:0 24px 72px;}
+		header{background:var(--header-bg); color:var(--paper); padding:48px 24px 40px; margin-bottom:8px;}
+		header .wrap{padding:0;}
+		h1{font-size:1.7rem; margin:0 0 8px; font-weight:650;}
+		header p{margin:0; color:#C9D3CE; font-size:0.98rem;}
+		h2{font-size:1.2rem; margin:0 0 8px; font-weight:650;}
+		h3{font-size:1rem; margin:22px 0 8px; font-weight:650;}
+		p{margin:0 0 12px;}
+		ul,ol{margin:0 0 12px; padding-left:22px;}
+		li{margin-bottom:6px;}
+		a{color:var(--accent);}
+		.intro{padding:24px 0 12px;}
+		.contents{display:flex; flex-wrap:wrap; gap:8px 16px; padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); font-size:0.9rem;}
+		.contents a{text-decoration:none;}
+		.contents a:hover{text-decoration:underline;}
+		section.guide-section{padding:30px 0; border-bottom:1px solid var(--line);}
+		section.guide-section:last-of-type{border-bottom:none;}
+		.section-kicker{color:var(--accent); font-size:0.78rem; font-weight:700; text-transform:uppercase;}
+		code.inline{background:var(--accent-soft); padding:1px 5px; border-radius:4px; font-family:"SF Mono", Consolas, Menlo, monospace; font-size:0.88em; overflow-wrap:anywhere;}
+		.code-block{position:relative; background:var(--code-bg); border-radius:6px; margin:10px 0 16px; overflow:hidden;}
+		.code-block pre{margin:0; padding:15px 76px 15px 16px; color:var(--code-text); font-family:"SF Mono", Consolas, Menlo, monospace; font-size:0.85rem; overflow-x:auto; white-space:pre;}
+		.code-block code{font:inherit;}
+		.code-block .prompt{color:var(--code-accent);}
+		.copy-btn{position:absolute; top:9px; right:9px; padding:5px 9px; border:1px solid rgba(255,255,255,0.2); border-radius:4px; background:rgba(255,255,255,0.08); color:var(--code-text); font:inherit; font-size:0.74rem; cursor:pointer;}
+		.copy-btn:hover{background:rgba(255,255,255,0.18);}
+		.tip,.warn{padding:12px 16px; border-radius:0 6px 6px 0; margin:14px 0; font-size:0.92rem;}
+		.tip{background:var(--accent-soft); border-left:3px solid var(--accent);}
+		.warn{background:var(--warn-bg); border-left:3px solid var(--warn-line);}
+		.tip strong,.warn strong{display:block; margin-bottom:2px;}
+		footer{text-align:center; color:var(--ink-soft); font-size:0.82rem; padding:28px 24px 0;}
+		@media (max-width:520px){
+			header{padding:36px 20px 30px;}
+			.wrap{padding-right:20px; padding-left:20px;}
+			.contents{gap:8px 12px;}
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<div class="wrap">
+			<h1>Git Survival Guide</h1>
+			<p>Common Git tasks, and what to do when things go gloriously sideways</p>
+		</div>
+	</header>
+
+	<main class="wrap">
+		<div class="intro">
+			<p>Git is much less mysterious when you know which repository and branch you are in. When in doubt, start with <code class="inline">git status</code>. Think of it as asking Git, "So, what have we done?" before either of you makes things worse.</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git status</code></pre>
+			</div>
+		</div>
+
+		<nav class="contents" aria-label="Guide contents">
+			<a href="#basic-actions">The basics</a>
+			<a href="#new-repository">Start a repository</a>
+			<a href="#clone">Clone a project</a>
+			<a href="#pull">Get updates</a>
+			<a href="#commit-push">Commit and push</a>
+			<a href="#undo">Undo (carefully)</a>
+			<a href="#troubleshooting">Tips &amp; fixes</a>
+			<a href="#conflicts">Conflicts</a>
+			<a href="#vim">The surprise editor</a>
+			<a href="#forgot-pull">Forgot to pull?</a>
+		</nav>
+
+		<section class="guide-section" id="basic-actions">
+			<span class="section-kicker">Actions</span>
+			<h2>The usual Git moves</h2>
+			<p>Five common tasks, one step at a time. Run the commands from inside the project folder unless the instructions say otherwise. Git is powerful; it is not psychic.</p>
+		</section>
+
+		<section class="guide-section" id="new-repository">
+			<h2><span class="section-kicker">Action 1</span><br>Create a new repository</h2>
+			<p>Create an empty project on GitLab first, then connect your local folder to it. Replace the example URL with the SSH URL shown by GitLab. The example address is fake; GitLab is, regrettably, not hosting your project there.</p>
+			<ol>
+				<li>Open a terminal in the folder you want to track.</li>
+				<li>Initialize Git and make the first commit:</li>
+			</ol>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git init
+<span class="prompt">$</span> git add README.md
+<span class="prompt">$</span> git commit -m "Initial commit"
+<span class="prompt">$</span> git branch -M main</code></pre>
+			</div>
+			<p>If there is no <code class="inline">README.md</code> yet, create one or add a file that already exists instead.</p>
+			<ol start="3">
+				<li>Connect the GitLab project and publish the branch:</li>
+			</ol>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git remote add origin git@gitlab.example.com:group/project.git
+<span class="prompt">$</span> git push -u origin main</code></pre>
+			</div>
+		</section>
+
+		<section class="guide-section" id="clone">
+			<h2><span class="section-kicker">Action 2</span><br>Clone an existing repository</h2>
+			<p>Cloning downloads a project and sets up its remote connection. Copy the clone URL from the project page on GitLab. It is the project-sized version of "make me a copy".</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git clone git@gitlab.example.com:group/project.git
+<span class="prompt">$</span> cd project</code></pre>
+			</div>
+			<p>Use the actual folder name created by <code class="inline">git clone</code> in the <code class="inline">cd</code> command.</p>
+		</section>
+
+		<section class="guide-section" id="pull">
+			<h2><span class="section-kicker">Action 3</span><br>Pull the latest changes</h2>
+			<p>Before you start working, make sure you are on the branch you intend to update. Then download and integrate its latest changes. Future-you appreciates the head start.</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git status
+<span class="prompt">$</span> git pull</code></pre>
+			</div>
+			<div class="tip"><strong>A tiny bit of prevention</strong>Run <code class="inline">git status</code> first. If you have uncommitted work, commit it or save it temporarily before pulling. Your unsaved changes do not enjoy surprises.</div>
+		</section>
+
+		<section class="guide-section" id="commit-push">
+			<h2><span class="section-kicker">Action 4</span><br>Make a change, commit and push</h2>
+			<p>A commit saves a snapshot locally. Pushing sends your commits to GitLab so others can access them. Commit first; announce your masterpiece to the world second.</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git status
+<span class="prompt">$</span> git add path/to/your-file
+<span class="prompt">$</span> git commit -m "Describe your change"
+<span class="prompt">$</span> git push</code></pre>
+			</div>
+			<p>Replace the file path and commit message with details about your work. To stage all current changes, use <code class="inline">git add .</code> instead, after checking <code class="inline">git status</code>.</p>
+			<div class="tip"><strong>Your future self says thanks</strong>Make small commits with clear messages. Check the staged files with <code class="inline">git status</code> before committing. "Stuff" is not a helpful commit message, even if it is technically accurate.</div>
+		</section>
+
+		<section class="guide-section" id="undo">
+			<h2><span class="section-kicker">Action 5</span><br>Undo a mistake (without making it a sequel)</h2>
+			<p>Choose the command based on what you want to undo. These actions are different: <code class="inline">revert</code> adds a new commit, while <code class="inline">restore</code> changes files in your working folder. Read twice, undo once.</p>
+			<h3>Undo a commit that has already escaped into the world</h3>
+			<p>Use <code class="inline">git revert</code> to create a new commit that reverses an earlier commit. This is the safer choice for commits already pushed or shared with others.</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git log --oneline
+<span class="prompt">$</span> git revert COMMIT_ID
+<span class="prompt">$</span> git push</code></pre>
+			</div>
+			<p>Replace <code class="inline">COMMIT_ID</code> with the identifier shown by <code class="inline">git log</code>.</p>
+			<h3>Discard uncommitted changes to a file</h3>
+			<div class="warn"><strong>This really does discard work</strong><code class="inline">git restore</code> overwrites your uncommitted changes to the named file. Check the file first and make a backup if you may need the changes. Git does not keep a sentimental scrapbook.</div>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git restore path/to/your-file</code></pre>
+			</div>
+			<h3>Restore one file from an earlier commit</h3>
+			<p>This puts that version of the file into your working folder. Review it, then commit the change if you want to keep it.</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git log --oneline
+<span class="prompt">$</span> git restore --source=COMMIT_ID -- path/to/your-file
+<span class="prompt">$</span> git status</code></pre>
+			</div>
+		</section>
+
+		<section class="guide-section" id="troubleshooting">
+			<span class="section-kicker">Tips &amp; fixes</span>
+			<h2>When Git gets dramatic</h2>
+			<p>Look here when something unexpected happens. Pause before trying more commands, read the full error message, and check <code class="inline">git status</code>. Avoid deleting files or forcing a push until you know what is happening. Panic is not a Git command (and it has terrible error messages).</p>
+		</section>
+
+		<section class="guide-section" id="conflicts">
+			<h2>Conflicts: Git needs a human opinion</h2>
+			<p>A conflict happens when Git cannot automatically combine changes to the same part of a file. Your changes and the incoming changes both need to be reviewed. Git is asking you to referee, not to pick a fight.</p>
+			<ol>
+				<li>See which files need attention:</li>
+			</ol>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git status</code></pre>
+			</div>
+			<ol start="2">
+				<li>Open each conflicted file. Conflict markers look like this:</li>
+			</ol>
+			<div class="code-block">
+				<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+Your version
+=======
+Incoming version
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; branch-name</code></pre>
+			</div>
+			<ol start="3">
+				<li>Edit the file to keep the right content, and remove all conflict markers.</li>
+				<li>Stage the resolved file and finish the merge:</li>
+			</ol>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git add path/to/resolved-file
+<span class="prompt">$</span> git status
+<span class="prompt">$</span> git commit</code></pre>
+			</div>
+			<p>Review the result before pushing. If Git says a rebase is in progress, do not run <code class="inline">git commit</code>; after resolving and staging, use <code class="inline">git rebase --continue</code> instead.</p>
+			<div class="tip"><strong>Not sure which version to keep?</strong>Ask a collaborator before removing either side. You can also compare the changes in your editor's source control view.</div>
+		</section>
+
+		<section class="guide-section" id="vim">
+			<h2>The terminal editor appeared. Nobody panic.</h2>
+			<p>Git may open a terminal editor when it needs a commit message. If the editor is Vim, press <code class="inline">Esc</code> first, then type one of these commands and press <code class="inline">Enter</code>. Yes, Vim can feel like a room with no visible door. There is a door:</p>
+			<ul>
+				<li><code class="inline">:wq</code> saves and exits. Use this to keep the commit message.</li>
+				<li><code class="inline">:q!</code> exits without saving. Use this to cancel editing the message.</li>
+			</ul>
+			<div class="tip"><strong>Remember</strong>Vim commands are typed after pressing <code class="inline">Esc</code>. They will not appear in the file itself.</div>
+		</section>
+
+		<section class="guide-section" id="forgot-pull">
+			<h2>Forgot to pull first? It happens.</h2>
+			<p>If your push is rejected because the remote has new commits, your local commits are not lost. No need to throw your laptop into the lake. First make sure your local work is committed, then integrate the remote changes:</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git status
+<span class="prompt">$</span> git pull --no-rebase
+<span class="prompt">$</span> git push</code></pre>
+			</div>
+			<p>If the pull reports a conflict, resolve it using the steps above, then push. If you have uncommitted changes, commit them before pulling, or ask for help if you are unsure.</p>
+			<div class="warn"><strong>Do not force-push to fix this</strong><code class="inline">git push --force</code> can overwrite commits on the shared repository and affect your collaborators. That is a spectacularly efficient way to make it everyone's problem.</div>
+		</section>
+	</main>
+
+	<footer>Git and GitLab Course</footer>
+	<script>
+		document.querySelectorAll('.copy-btn').forEach((button) => {
+			button.addEventListener('click', async () => {
+				const command = button.closest('.code-block').querySelector('code').innerText;
+				try {
+					await navigator.clipboard.writeText(command.replace(/^\$ /gm, ''));
+					button.textContent = 'Copied';
+					window.setTimeout(() => { button.textContent = 'Copy'; }, 1400);
+				} catch {
+					button.textContent = 'Select to copy';
+				}
+			});
+		});
+	</script>
+</body>
+</html>
