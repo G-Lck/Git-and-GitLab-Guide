@@ -70,6 +70,18 @@
   }
   .course-link:hover{background:#CFE0DA;}
   .course-link strong{display:block; color:var(--accent);}
+  .survival-link{
+    margin-bottom:44px;
+    padding:18px 20px;
+    background:#FFFFFF;
+    border:1px solid var(--line);
+    border-left:4px solid var(--accent);
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(28,35,33,0.06);
+  }
+  .survival-link:hover{background:#FFFFFF; border-color:var(--accent);}
+  .survival-link strong{font-size:1.05rem;}
+  .survival-link span{display:block; margin-top:4px; color:var(--ink-soft); font-size:0.9rem;}
   footer{
     text-align:center;
     color:var(--ink-soft);
@@ -89,8 +101,9 @@
 
 <main class="wrap">
   <section>
-    <a class="course-link" href="Git_Survival_Guide/Survival_Guide.html">
+    <a class="course-link survival-link" href="Git_Survival_Guide/Survival_Guide.html">
       <strong>Git Survival Guide</strong>
+      <span>Quick commands for everyday Git tasks, plus help when things go sideways.</span>
     </a>
     <h2>Course material</h2>
     <p>This course introduces the basics of Git and GitLab through practical exercises and presentations.</p>
