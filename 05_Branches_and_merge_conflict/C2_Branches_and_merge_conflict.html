@@ -137,15 +137,15 @@
 				<li>Go to <a href="https://gitlab.unige.ch/" target="_blank">gitlab.unige.ch</a>, open the <strong>HepB_Senegal_geneva</strong> group, and open the <strong>Example</strong> project.</li>
 			</ol>
 			<figure>
-				<img src="images/open_example_project.png" alt="Example project in the GitLab group">
+				<img src="images/select_example.png" alt="HepB_Senegal_geneva group page with the Example project selected">
 				<figcaption>Open the Example project.</figcaption>
 			</figure>
 			<ol start="2">
 				<li>Click <strong>Code</strong>, then under <strong>Clone with SSH</strong>, click the copy button next to the URL.</li>
 			</ol>
 			<figure>
-				<img src="images/copy_example_ssh_url.png" alt="Clone with SSH URL of the Example project">
-				<figcaption>Copy the SSH clone URL of the Example project.</figcaption>
+				<img src="images/click_on_ssh.png" alt="Code button open on the Example project, Clone with SSH section visible">
+				<figcaption>Click <strong>Code</strong>, then <strong>SSH</strong>, and copy the clone URL.</figcaption>
 			</figure>
 			<ol start="3">
 				<li>Open a terminal, move to the folder where you want to store the project (with the cd command), and paste the URL into this command:</li>
@@ -190,7 +190,7 @@
 	<section class="step">
 		<h2><span class="step-num">4</span>Create and commit a file</h2>
 		<div class="step-body">
-			<p>Create a new R script named <code class="inline">analysis_your-login.r</code> (replace <code class="inline">your-login</code> with your own login, like in the previous chapter) and type <code class="inline">print("Hello, World!")</code> inside it. You can do this in RStudio, VS Code, or any text editor — just make sure the file is saved inside the project folder.</p>
+			<p>Create a new R script named <code class="inline">analysis_your-login.r</code> (replace <code class="inline">your-login</code> with your own login, like in the previous chapter) and type <code class="inline">print("Hello, World!")</code> inside it.</p>
 			<p>Stage the file and create a commit:</p>
 			<div class="code-block">
 				<button class="copy-btn">Copy</button>
@@ -243,7 +243,11 @@
 			</div>
 			<div class="tip">
 				<strong>Clean up (optional)</strong>
-				Once the merge is done and pushed, you can delete the branch locally with <code class="inline">git branch -d feat/new_analysis_your-login</code>.
+				Once the merge is done and pushed, you can delete the branch locally:
+				<div class="code-block">
+					<button class="copy-btn">Copy</button>
+					<pre><span class="prompt">$</span> git branch -d feat/new_analysis_your-login</pre>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -251,7 +255,7 @@
 	<section class="step">
 		<h2><span class="step-num">7</span>Let's create a merge conflict</h2>
 		<div class="step-body">
-			<p>A merge conflict happens when two branches change the <strong>same lines</strong> of the <strong>same file</strong> — Git cannot guess which version to keep, so it asks you to decide. That sounds scary, but it is just Git being careful. Let's trigger one on purpose to practice.
+			<p>A merge conflict happens when two branches change the <strong>same lines</strong> of the <strong>same file</strong>, Git cannot guess which version to keep, so it asks you to decide. That sounds scary, but it is just Git being careful. Let's trigger one on purpose to practice.
 				Make sure you are on <code class="inline">main</code> and up to date, then create a new branch:</p>
 			<div class="code-block">
 				<button class="copy-btn">Copy</button>
@@ -326,7 +330,7 @@
 				<pre>CONFLICT (content): Merge conflict in analysis_your-login.r
 Automatic merge failed; fix conflicts and then commit the result.</pre>
 			</div>
-			<p>Don't panic — your work is not lost. Git has paused the merge and waits for you to decide. Check which files are in conflict:</p>
+			<p>Don't panic, your work is not lost. Git has paused the merge and waits for you to decide. Check which files are in conflict:</p>
 			<div class="code-block">
 				<button class="copy-btn">Copy</button>
 				<pre><span class="prompt">$</span> git status</pre>
@@ -368,11 +372,15 @@ print("Hello my World!")
 			</div>
 			<div class="tip">
 				<strong>Merges can also happen on GitLab</strong>
-				Instead of merging locally, you can open a <em>merge request</em> on GitLab to merge a branch into <code class="inline">main</code> directly from the web interface. If there is a conflict, GitLab even provides an online merge editor to resolve it — handy for small conflicts. For bigger ones, the local workflow you just practiced stays the way to go.
+				Instead of merging locally, you can open a <em>merge request</em> on GitLab to merge a branch into <code class="inline">main</code> directly from the web interface. If there is a conflict, GitLab even provides an online merge editor to resolve it, handy for small conflicts. For bigger ones, the local workflow you just practiced stays the way to go.
 			</div>
 			<div class="tip">
 				<strong>Clean up (optional)</strong>
-				You can delete the branch locally with <code class="inline">git branch -d feat/conflict_your-login</code>.
+				You can delete the branch locally:
+				<div class="code-block">
+					<button class="copy-btn">Copy</button>
+					<pre><span class="prompt">$</span> git branch -d feat/conflict_your-login</pre>
+				</div>
 			</div>
 		</div>
 	</section>
