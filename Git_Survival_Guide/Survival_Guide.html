@@ -273,12 +273,12 @@ Incoming version
 				<li><code class="inline">:wq</code> saves and exits. Use this to keep the commit message.</li>
 				<li><code class="inline">:q!</code> exits without saving. Use this to cancel editing the message.</li>
 			</ul>
-            <p>If you ever use vim before I  highly recommend you to change the default text editor. For that you can run:</p>
+            <p>If you have never used vim before, I highly recommend you to change the default text editor. For that you can run:</p>
             <div class="code-block">
                 <button class="copy-btn" type="button">Copy</button>
                 <pre><code><span class="prompt">$</span> git config --global core.editor "my_new_editor"</code></pre>
             </div>
-            <p>If you use vscode you can set it as the default editor with: "vscode", if you use Rstudio you can set it with: "rstudio". If none of them, maybe nano could be an easier text editor to use.</p>
+            <p>If you use VS Code (recommended), set it with: <code class="inline">"code --wait"</code>. Otherwise <code class="inline">"notepad"</code> on Windows or <code class="inline">"nano"</code> in the terminal are easy options too. RStudio, however, does not work here: it does not make Git wait for you to finish, so commits get aborted with an empty message.</p>
 		</section>
 
 		<section class="guide-section" id="forgot-pull">
