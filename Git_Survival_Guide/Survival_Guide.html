@@ -92,10 +92,15 @@
 				<li><a href="#clone">Clone a remote repository</a></li>
 				<li><a href="#pull">pull to be update</a></li>
 				<li><a href="#commit-push">Commit and push</a></li>
+				<li><a href="#branches">Create a branch</a></li>
+				<li><a href="#switch-branches">Switch branches</a></li>
+				<li><a href="#merge-branch">Publish and merge your branch</a></li>
 				<li><a href="#undo">Undo (carefully)</a></li>
 				<li><a href="#troubleshooting">Having knowledge</a></li>
 				<li><a href="#conflicts">Conflicts</a></li>
 				<li><a href="#vim">The surprise editor</a></li>
+				<li><a href="#wrong-branch">Committed on the wrong branch?</a></li>
+				<li><a href="#stash">Stash: park work in progress</a></li>
 				<li><a href="#forgot-pull">Forgot to pull?</a></li>
 			</ul>
 		</nav>
@@ -158,7 +163,7 @@
 				<button class="copy-btn" type="button">Copy</button>
 				<pre><code><span class="prompt">$</span> git pull</code></pre>
 			</div>
-			<div class="tip"><strong>A tiny bit of prevention</strong>Run <code class="inline">git status</code> first. If you have uncommitted work, commit it or save it temporarily (fit stash for example) before pulling.</div>
+			<div class="tip"><strong>A tiny bit of prevention</strong>Run <code class="inline">git status</code> first. If you have uncommitted work, commit it or save it temporarily with <a href="#stash">git stash</a> before pulling.</div>
 		</section>
 
 		<section class="guide-section" id="commit-push">
@@ -183,6 +188,67 @@
 			</div>
 		</section>
 
+		<section class="guide-section" id="branches">
+			<h2><span class="section-kicker">Action</span><br>Create a branch and switch to it</h2>
+			<p>A branch lets you work on a new feature or fix without touching <code class="inline">main</code> until it is ready. Creating and switching happen in a single command:</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git switch -c feat/my-feature</code></pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git branch</code></pre>
+			</div>
+			<p><code class="inline">git branch</code> lists your local branches; the one marked with <code class="inline">*</code> is where you are right now.</p>
+			<div class="tip"><strong>Name it well</strong>Use a prefix like <code class="inline">feat/</code> or <code class="inline">fix/</code> followed by a short description, e.g. <code class="inline">feat/new-analysis</code>. One branch, one task, and keep branches short-lived.</div>
+		</section>
+
+		<section class="guide-section" id="switch-branches">
+			<h2><span class="section-kicker">Action</span><br>Switch between branches</h2>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git switch main</code></pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git switch -</code></pre>
+			</div>
+			<p><code class="inline">git switch -</code> takes you back to the branch you were on before, handy when bouncing between <code class="inline">main</code> and your feature branch.</p>
+			<div class="warn"><strong>Uncommitted changes follow you</strong>Changes you have not committed travel with you when you switch branches, and sometimes Git will refuse to switch to avoid losing them. Commit first, or park them with <a href="#stash">git stash</a>.</div>
+		</section>
+
+		<section class="guide-section" id="merge-branch">
+			<h2><span class="section-kicker">Action</span><br>Publish and merge your branch</h2>
+			<p>The first push of a new branch needs the <code class="inline">-u</code> option to link it to GitLab. After that, a plain <code class="inline">git push</code> is enough.</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git push -u origin feat/my-feature</code></pre>
+			</div>
+			<p>When the work is ready, bring it into <code class="inline">main</code>. Always update <code class="inline">main</code> first, so you merge on top of the latest state:</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git switch main</code></pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git pull</code></pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git merge feat/my-feature</code></pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git push origin main</code></pre>
+			</div>
+			<p>Once merged, the branch has served its purpose. Delete it locally to keep the branch list tidy (you can also delete it on GitLab):</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git branch -d feat/my-feature</code></pre>
+			</div>
+			<div class="tip"><strong>Merge going wrong?</strong>You can cancel a merge at any time before committing with <code class="inline">git merge --abort</code>. If Git reports conflicts, follow the steps in the <a href="#conflicts">Conflicts</a> section.</div>
+		</section>
+
 		<section class="guide-section" id="undo">
 			<h2><span class="section-kicker">Action</span><br>Go back to an old commit</h2>
 			<p>Choose the command based on what you want to undo. These actions are different: <code class="inline">revert</code> adds a new commit, while <code class="inline">restore</code> changes files in your working folder. Read twice, undo once.</p>
@@ -202,12 +268,15 @@
 			</div>
 			<p>Replace <code class="inline">COMMIT_ID</code> with the identifier shown by <code class="inline">git log</code>.</p>
 			<h3>Discard uncommitted changes to a file</h3>
-			<div class="warn"><strong>This really does discard work</strong><code class="inline">git restore</code> overwrites your uncommitted changes to the named file. Check the file first and make a backup with a commit or stash or put it in a new branchif you may need the changes.</div>
+			<div class="warn"><strong>This really does discard work</strong><code class="inline">git restore</code> overwrites your uncommitted changes to the named file. Check the file first, and make a backup with a commit, a <a href="#stash">stash</a>, or a new branch if you may need the changes.</div>
 			<div class="code-block">
 				<button class="copy-btn" type="button">Copy</button>
 				<pre><code><span class="prompt">$</span> git restore path/to/your-file</code></pre>
-                <p>you can also restore all files in the working directory by omitting the file path:</p>
-                <pre><code><span class="prompt">$</span> git restore .</code></pre>
+			</div>
+			<p>You can also restore all files in the working directory by omitting the file path:</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git restore .</code></pre>
 			</div>
 			<h3>Restore one file from an earlier commit</h3>
 			<p>This puts that version of the file into your working folder. Review it, then commit the change if you want to keep it.</p>
@@ -279,6 +348,44 @@ Incoming version
                 <pre><code><span class="prompt">$</span> git config --global core.editor "my_new_editor"</code></pre>
             </div>
             <p>If you use VS Code (recommended), set it with: <code class="inline">"code --wait"</code>. Otherwise <code class="inline">"notepad"</code> on Windows or <code class="inline">"nano"</code> in the terminal are easy options too. RStudio, however, does not work here: it does not make Git wait for you to finish, so commits get aborted with an empty message.</p>
+		</section>
+
+		<section class="guide-section" id="wrong-branch">
+			<h2><span class="section-kicker">Tip</span><br>Committed on the wrong branch? It happens too.</h2>
+			<p>You made commits directly on <code class="inline">main</code> instead of a feature branch. As long as you have not pushed yet, move those commits to a new branch and put <code class="inline">main</code> back to the state on GitLab:</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git branch feat/my-work</code></pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git switch main</code></pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git reset --keep origin/main</code></pre>
+			</div>
+			<p>Your commits are now safe on <code class="inline">feat/my-work</code>, and <code class="inline">main</code> matches the remote again. Switch to the new branch and carry on.</p>
+			<div class="warn"><strong>Only if you have not pushed</strong>If the commits are already on GitLab, do not rewrite the shared history. Revert them instead, see the <a href="#undo">Undo</a> section.</div>
+		</section>
+
+		<section class="guide-section" id="stash">
+			<h2><span class="section-kicker">Tip</span><br>Need to switch branches with uncommitted work? Stash it.</h2>
+			<p>The stash is a shelf for work in progress: it saves your uncommitted changes and gives you a clean folder, so you can switch branches or pull safely.</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git stash</code></pre>
+			</div>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git switch other-branch</code></pre>
+			</div>
+			<p>Back on your branch, take the changes off the shelf:</p>
+			<div class="code-block">
+				<button class="copy-btn" type="button">Copy</button>
+				<pre><code><span class="prompt">$</span> git stash pop</code></pre>
+			</div>
+			<div class="tip"><strong>Lost track of your stashes?</strong><code class="inline">git stash list</code> shows everything on the shelf, and <code class="inline">git stash show -p</code> previews the most recent one.</div>
 		</section>
 
 		<section class="guide-section" id="forgot-pull">
